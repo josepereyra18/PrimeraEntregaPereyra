@@ -1,0 +1,14 @@
+[
+  {
+    "color": "gray",
+    "type": "totoro",
+    "size": "nano",
+    "name": "lil Buddy"
+  },
+  {
+    "color": "white",
+    "type": "chicken",
+    "size": "nano",
+    "name": "Mirabel"
+  }
+]
