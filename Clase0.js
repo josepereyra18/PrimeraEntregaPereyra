@@ -1,85 +1,46 @@
-// class ContadorClass{
-//     static totalDeContadores = 0; // se refiere a la clase
-//     constructor( nombre ){ // siempre se inicializa automaticamente, se puede llamar constructor
-//         this.nombre = nombre; // se refiere a este especifico nombre
-//         this.contador = 0;
-//     }
-
-//     getResponsable(){
-//         return this.nombre;
-//     }
-
-//     contar(){
-//         this.contador++;
-//         ContadorClass.totalDeContadores++;
-//     }
-//     getCuentaIndividual (){
-//         return this.contador;
-//     }
-
-//     getCuentaTotal(){
-//         return ContadorClass.totalDeContadores;
-//     }
-// }
-
-// const contador = new ContadorClass('Josefina');
-
-// // instanciar una clase, la inicio, le paso 
-// //parametros, y se crea un objeto con esos parametros.
-// //en este caso contador que le paso por parametro Josefina
-
-
-
-// console.log(contador); //Contador { nombre: 'Josefina', contador: 0 }
-// //>> Contador { nombre: 'Josefina', contador: 0 }
-// //console.log(contador.nombre);
-// //>> Josefina
-
-// console.log(contador.getResponsable()); //Josefina
-// console.log(contador.getCuentaIndividual()); //0
-// console.log(contador.getCuentaTotal()); //0
-// contador.contar(); // contador--> 1
-// console.log(contador) //Contador { nombre: 'Josefina', contador: 1 }
-
-// //! node Clase0.js
-
-
-class Product {
-    constructor(title, description, price, thumbnail, code, stock) {
-        this.title = title;
-        this.description = description;
-        this.price = price;
-        this.thumbnail = thumbnail;
-        this.code = code;
-        this.stock = stock;
-    }
-}
+const fs = require('fs');
 
 class ProductManager {
-    constructor() {
-        this.products = [];
+    constructor(filePath) {
+        this.path = filePath;
+        this.products = this.loadProducts();
+    }
+
+    loadProducts() {
+        try {
+            const data = fs.readFileSync(this.path, 'utf8');
+            return JSON.parse(data);
+        } catch (error) {
+            // Si hay un error al leer el archivo (por ejemplo, si el archivo no existe), inicializa products como un array vacío.
+            return [];
+        }
+    }
+
+    saveProducts() {
+        const data = JSON.stringify(this.products, null, 2);
+        fs.writeFileSync(this.path, data, 'utf8');
     }
 
     getProducts() {
         return this.products;
     }
 
-
     addProduct(title, description, price, thumbnail, code, stock) {
-
+        if (title === undefined || description === undefined || price === undefined || thumbnail === undefined || code === undefined || stock === undefined) {
+            throw new Error("Todos los parámetros son obligatorios.");
+        }
         const codeExists = this.products.some(product => product.code === code);
 
         if (codeExists) {
             throw new Error("El código de producto está repetido.");
         }
-
-
         const id = this.generateUniqueId();
         const newProduct = new Product(title, description, price, thumbnail, code, stock);
         newProduct.id = id;
 
         this.products.push(newProduct);
-
+        this.saveProducts();
+        // invoca saveProducts después de realizar la operación para mantener la persistencia en el archivo.
         return newProduct;
     }
 
@@ -93,26 +54,50 @@ class ProductManager {
         return product;
     }
 
+    updateProduct(id, newData) {
+        const productIndex = this.products.findIndex(product => product.id === id);
+
+        if (productIndex === -1) {
+            throw new Error("Producto no encontrado.");
+        }
+
+        this.products[productIndex] = { ...this.products[productIndex], ...newData };
+        this.saveProducts();
+        // invoca saveProducts después de realizar la operación para mantener la persistencia en el archivo.
+
+        return this.products[productIndex];
+    }
+
+    deleteProduct(id) {
+        const productIndex = this.products.findIndex(product => product.id === id);
+
+        if (productIndex === -1) {
+            throw new Error("Producto no encontrado.");
+        }
+
+        const deletedProduct = this.products.splice(productIndex, 1)[0];
+        this.saveProducts();
+        // invoca saveProducts después de realizar la operación para mantener la persistencia en el archivo.
+
+        return deletedProduct;
+    }
+
     generateUniqueId() {
         return Math.random().toString(36);
     }
 }
 
+// uso de la clase ProductManager
+const manager = new ProductManager('products.json');
 
-const manager = new ProductManager();
 console.log(manager.getProducts());
-manager.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 1234);
-console.log(manager.getProducts());
 
-try {
-    manager.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 1234);
-} catch (error) {
-    console.log(error.message);
-}
+console.log(manager.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 1234));
 
-try {
-    const foundProduct = manager.getProductById(manager.getProducts()[0].id);
-    console.log("Producto encontrado:", foundProduct);
-} catch (error) {
-    console.log(error.message);
-}
+console.log(manager.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 1234)); // Debería arrojar una excepción pq esta repetido
+
+console.log(manager.getProductById(manager.getProducts()[0].id));
+
+console.log(manager.updateProduct(manager.getProducts()[0].id, { price: 250 }));
+
+console.log(manager.deleteProduct(manager.getProducts()[0].id));
