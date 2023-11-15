@@ -101,9 +101,9 @@ const manager = new ProductManager('products.json');
 
 console.log(manager.getProducts());
 
-// console.log(manager.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 1234));
+console.log(manager.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 1234));
 
-// console.log(manager.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc12357", 1234)); // Debería arrojar una excepción pq esta repetido
+console.log(manager.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 1234)); // Debería arrojar una excepción pq esta repetido
 
 console.log(manager.getProductById(manager.getProducts()[0].id));
 
