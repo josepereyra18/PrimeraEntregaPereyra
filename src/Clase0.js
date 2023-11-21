@@ -1,4 +1,4 @@
-const fs = require('fs').promises; // Importa fs.promises en lugar de fs
+const fs = require('fs'); // Importa fs.promises en lugar de fs
 
 class Product {
     constructor(title, description, price, thumbnail, code, stock) {
@@ -14,12 +14,22 @@ class Product {
 class ProductManager {
     constructor(filePath) {
         this.path = filePath;
-        this.products =  [];
+        this.products = this.loadProducts();
+    }
+
+    loadProducts() {
+        try {
+            const data = fs.readFileSync(this.path, 'utf8');
+            return JSON.parse(data);
+        } catch (error) {
+            // Si hay un error al leer el archivo (por ejemplo, si el archivo no existe), inicializa products como un array vacío.
+            return [];
+        }
     }
 
     async saveProducts() {
         const data = JSON.stringify(this.products, null, 2);
-        await fs.writeFile(this.path, data, 'utf8');
+        fs.writeFileSync(this.path, data, 'utf8');
     }
 
     async getProducts(limit) {
@@ -82,5 +92,6 @@ class ProductManager {
         return Math.random().toString(36);
     }
 }
+
 
 module.exports = ProductManager;
