@@ -1,6 +1,8 @@
 async function main() {
-    const ProductManager = require('./Clase0');
+    
+    const ProductManager = require('./ProductManager.js');
     const manager = new ProductManager('./products.json');
+
 
     await manager.addProduct("producto prueba", "Este es un producto prueba", 200, "Sin imagen", "abc123", 1234);
 

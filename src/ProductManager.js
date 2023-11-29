@@ -37,7 +37,7 @@ class ProductManager {
     }
 
     async addProduct(title, description, price, thumbnail, code, stock) {
-        if (title === undefined || description === undefined || price === undefined || thumbnail === undefined || code === undefined || stock === undefined) {
+        if (title === undefined || description === undefined || price === undefined || code === undefined || stock === undefined) {
             throw new Error("Todos los parámetros son obligatorios.");
         }
         const codeExists =  this.products.some(product => product.code === code);
@@ -73,6 +73,7 @@ class ProductManager {
 
         this.products[productIndex] = { ...this.products[productIndex], ...newData };
         await this.saveProducts();
+
         return this.products[productIndex];
     }
 

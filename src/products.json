@@ -1,10 +1,10 @@
 [
   {
-    "title": "producto prueba",
+    "title": "producto prueba LO AGREGUE Y EDITE",
     "description": "Este es un producto prueba",
     "price": 200,
     "thumbnail": "Sin imagen",
-    "code": "abc123",
+    "code": "a",
     "stock": 1234,
     "id": "0.1vwzy77pnbo"
   },
@@ -18,12 +18,12 @@
     "id": "0.8am5hz8qq28"
   },
   {
-    "title": "producto prueba",
+    "title": "PRUEBA AAAA",
     "description": "Este es un producto prueba",
-    "price": 260,
+    "price": 200,
     "thumbnail": "Sin imagen",
-    "code": "ñ09j5",
-    "stock": 14,
+    "code": "a",
+    "stock": 1234,
     "id": "0.qdrqm6b5ee"
   },
   {
