@@ -2,7 +2,7 @@ const { Router } = require('express')
 const router = Router()
 
 const CartManager = require('../CartManager.js');
-const cartManager = new CartManager('./carrito.json');
+const cartManager = new CartManager('./mocks/carts.json');
 
 // router.get('/', async (req, res) => {
 //     const limit = req.query.limit;

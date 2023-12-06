@@ -1,4 +1,4 @@
-const fs = require('fs'); // Importa fs.promises en lugar de fs
+const fs = require('fs'); 
 
 class Product {
     constructor(title, description, price, thumbnail, code, stock) {
